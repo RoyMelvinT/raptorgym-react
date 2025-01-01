@@ -1,6 +1,5 @@
 import express from 'express';
 import { createServer } from 'http';
-import { Server as SocketIOServer } from 'socket.io';
 import cors from 'cors';
 import router from './routes.mjs';
 
@@ -15,12 +14,6 @@ app.use(cors({
 
 app.use(express.json());
 
-const io = new SocketIOServer(httpServer, {
-    cors: {
-        origin: '*', // Permite todos los orígenes
-        methods: ['GET', 'POST', 'PUT', 'DELETE']
-    }
-});
 
 app.use((req, res, next) => {
     req.io = io;
@@ -29,10 +22,6 @@ app.use((req, res, next) => {
 
 app.use('/api', router);
 
-io.on('connection', (socket) => {
-    console.log('Un cliente se ha conectado');
-    // Aquí puedes manejar eventos específicos del socket
-});
 
 const port = process.env.PORT || 3000;
 
